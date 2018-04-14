@@ -5,6 +5,7 @@ import 'SimpleApp.dart';
 import 'RandomWordsApp.dart';
 import 'RouterApp.dart';
 import 'NavigationChamber.dart';
+import 'Notes/WidgetOrGetter.dart';
 
 //
 // main() в main.dart - это entry point для всего приложения
@@ -15,7 +16,6 @@ var widget
 //= new HelloWorldApp();
 //= new SimpleApp();
 = new RouterApp();
-//= new NavApp();
 
 void main() => runApp(widget);
 

@@ -7,28 +7,41 @@ class RouterApp extends StatelessWidget {
   Widget build(BuildContext context){
     return new MaterialApp(
       title: 'Router',
-      home: new RouterContent()
+      home: new _RouterContent()
     );
   }
 }
 
-class RouterContent extends StatelessWidget{
+class _RouterContent extends StatelessWidget{
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context /* Контекст MaterialApp */) {
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Router'),
         ),
 
-        body: new RaisedButton(
-          /*  Если использовать контекст RouterApp, то пишет,
-              что нет навигатора в этом контексте.
-              Предполагаю, что внешний контекст не имеет понятия
-              о существовании App и поэтому о навигаторе тоже */
-          onPressed: () => Navigator.of(context).push(
-            new MaterialPageRoute(builder: (ctx) => new HelloWorldApp())
-          )
-        )
-    );
+        body: new _ListOfRoutes()
+
+        );
   }
+
+  getButton(BuildContext ctx) => new RaisedButton(onPressed: () => Navigator.of(ctx).push(
+    new MaterialPageRoute(builder: (ctx) => new HelloWorldApp())));
+
+}
+
+class _ListOfRoutes extends StatelessWidget{
+
+  to(BuildContext ctx, Widget w) => Navigator.of(ctx).push(
+      new MaterialPageRoute(builder: (ctx) => w));
+
+  @override
+  Widget build(BuildContext context) {
+    return new ListView(children: <Widget>[
+      new ListTile(title: new Text("One"),onTap: () => to(context,new HelloWorldApp())),
+      new ListTile(title: new Text("Two"),onTap: () => to(context,new HelloWorldApp()))
+    ]);
+  }
+
+
 }
