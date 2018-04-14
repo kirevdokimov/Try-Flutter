@@ -11,6 +11,7 @@ class _State extends State<ChatScreen> with TickerProviderStateMixin{
 
   final List<ChatMessage> _messages = <ChatMessage>[];
 
+  bool _isComposing = false;
 
   // Эта байда нужна для работы с TextField
   final TextEditingController _textController = new TextEditingController();
@@ -51,14 +52,31 @@ class _State extends State<ChatScreen> with TickerProviderStateMixin{
       controller: _textController,
       onSubmitted: _handleSubmitted,
       decoration: new InputDecoration.collapsed(hintText: "Send a message"),
+      // Устанавливаем _isComposing true только при наличии текста в поле
+      onChanged: (text) => setState(() {
+        _isComposing = text.length > 0;
+        //print("$_isComposing");
+      })
     );
+
+    dodo(){
+      // Если же сюда запихнуть тернарный, то вообще скажет, что dodo не используется и не существует.
+      if(_isComposing){_handleSubmitted(_textController.text);}
+    }
 
     //Кнопка для отправки
     var button = new Container(
       margin: new EdgeInsets.symmetric(horizontal: 4.0),
       child: new IconButton(
           icon: new Icon(Icons.send),
-          onPressed: () => _handleSubmitted(_textController.text)),
+          // Устанавливаем обработчик в зависимости от наличия текста в поле
+          // Используя тернарный оператор вместо простого вызова метода
+          // программа работает неисправно и в логах выдает
+          // W/audio_hw_generic: Not supplying enough data to HAL, expected position 18271738 , only wrote 17882640
+          //onPressed: () => _isComposing ? () => _handleSubmitted(_textController.text): {},
+          // Если использовать
+          onPressed: () => dodo(),
+      )
     );
 
     var container = new Container(
@@ -81,6 +99,9 @@ class _State extends State<ChatScreen> with TickerProviderStateMixin{
 
   void _handleSubmitted(String text) {
     _textController.clear();
+    //Сбрасивыем значение наличия текста в поле
+    setState(() {_isComposing = false;});
+
     ChatMessage message = new ChatMessage(
         text: text,
         // для контроля за анимацией и временем исполнения

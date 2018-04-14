@@ -12,7 +12,7 @@ class AnimationScreenState extends State<AnimationScreen> with TickerProviderSta
     var animctrl = new AnimationController(
       duration: new Duration(milliseconds: 700),
       vsync: this,
-    )
+    );
     
     var buttonLeft = new AnimButton(
       text: "Button",
