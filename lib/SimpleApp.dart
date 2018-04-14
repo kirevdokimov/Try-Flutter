@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart'; // библиотека с английскими словами
 
+class SimpleApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
 
-class SimpleApp {
-  getWidget() => new Text("Hello world");
+    final wordPair = new WordPair.random(); // Выбираем пару случайных слов
+
+    return new MaterialApp(
+      title: 'SimpleAppTitle',
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text('Simple App'),
+        ),
+        body: new Center(
+          child: new Text(wordPair.asPascalCase), // Выводим пару в pascal case
+        ),
+      ),
+    );
+  }
 }
