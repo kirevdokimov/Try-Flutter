@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tryflutter/HelloWorldApp.dart';
 import 'Screens/ChatScreen.dart';
+import 'Notes/Animations.dart';
 
 class RouterApp extends StatelessWidget {
 
@@ -44,7 +45,8 @@ class _ListOfRoutes extends StatelessWidget{
       // с виджетом появляется.
       new ListTile(title: new Text("Chat"),onTap: () => to(context,new ChatScreen())),
       new ListTile(title: new Text("HelloWorldApp"),onTap: () => to(context,new HelloWorldApp())),
-      new ListTile(title: new Text("Just Scaffold"),onTap: () => to(context,new _JustScaffold()))
+      new ListTile(title: new Text("Just Scaffold"),onTap: () => to(context,new _JustScaffold())),
+      new ListTile(title: new Text("Animations"),onTap: () => to(context,new AnimationScreen())),
     ]);
   }
 }

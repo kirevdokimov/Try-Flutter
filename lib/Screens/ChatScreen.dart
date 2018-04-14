@@ -7,7 +7,7 @@ class ChatScreen extends StatefulWidget {
   State createState() => new _State();
 }
 
-class _State extends State<ChatScreen> {
+class _State extends State<ChatScreen> with TickerProviderStateMixin{
 
   final List<ChatMessage> _messages = <ChatMessage>[];
 
@@ -81,21 +81,43 @@ class _State extends State<ChatScreen> {
 
   void _handleSubmitted(String text) {
     _textController.clear();
-    ChatMessage message = new ChatMessage(text: text);
+    ChatMessage message = new ChatMessage(
+        text: text,
+        // для контроля за анимацией и временем исполнения
+        animationController: new AnimationController(
+          duration: new Duration(milliseconds: 700),
+          vsync: this,
+        )
+    );
+
     //Делаем изменения внутри setState, чтобы уведомить widget об изменениях для rebuild
     // Вообще можно вызывать и после изменений, но рекомендуется внутри
     setState(() {_messages.insert(0, message);});
+
+    // Вызов исполнения анимации
+    message.animationController.forward();
+  }
+
+  //Анимации кушают память и неплохо удалять контроллеры при ненадобности
+  @override
+  void dispose() {
+    for (ChatMessage message in _messages)
+      message.animationController.dispose();
+    super.dispose();
   }
 }
 
 
 
 class ChatMessage extends StatelessWidget {
-  ChatMessage({this.text}); // Конструктор
   final String text;
+  final AnimationController animationController;
+
+  ChatMessage({this.text,this.animationController}); // Конструктор
+
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    var messageContent =  new Container(
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,6 +138,15 @@ class ChatMessage extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    //Для того, чтобы анимация воспроизводилась на контейнере, сам контейнер
+    // нужно обернуть в анимацию
+    return new SizeTransition(
+        sizeFactor: new CurvedAnimation(
+        parent: animationController, curve: Curves.easeOut),
+        axisAlignment: 0.0,
+        child: messageContent
     );
   }
 }
