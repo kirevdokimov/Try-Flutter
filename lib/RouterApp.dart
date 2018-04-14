@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tryflutter/HelloWorldApp.dart';
+import 'Screens/ChatScreen.dart';
 
 class RouterApp extends StatelessWidget {
 
@@ -41,6 +42,7 @@ class _ListOfRoutes extends StatelessWidget{
       // Навигатор способен перейти как на новый App, так и просто на новый виджет.
       // В случае с переходом на App кнопки назад в AppBar не появляется. В случае
       // с виджетом появляется.
+      new ListTile(title: new Text("Chat"),onTap: () => to(context,new ChatScreen())),
       new ListTile(title: new Text("HelloWorldApp"),onTap: () => to(context,new HelloWorldApp())),
       new ListTile(title: new Text("Just Scaffold"),onTap: () => to(context,new _JustScaffold()))
     ]);
