@@ -11,12 +11,8 @@ import 'Notes/WidgetOrGetter.dart';
 // main() в main.dart - это entry point для всего приложения
 //
 
-var widget
-//= new new DefaultApp();
-//= new HelloWorldApp();
-//= new SimpleApp();
-= new RouterApp();
+var app = new RouterApp();
 
-void main() => runApp(widget);
+void main() => runApp(app);
 
 

@@ -38,10 +38,19 @@ class _ListOfRoutes extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return new ListView(children: <Widget>[
-      new ListTile(title: new Text("One"),onTap: () => to(context,new HelloWorldApp())),
-      new ListTile(title: new Text("Two"),onTap: () => to(context,new HelloWorldApp()))
+      // Навигатор способен перейти как на новый App, так и просто на новый виджет.
+      // В случае с переходом на App кнопки назад в AppBar не появляется. В случае
+      // с виджетом появляется.
+      new ListTile(title: new Text("HelloWorldApp"),onTap: () => to(context,new HelloWorldApp())),
+      new ListTile(title: new Text("Just Scaffold"),onTap: () => to(context,new _JustScaffold()))
     ]);
   }
+}
 
+class _JustScaffold extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(appBar: new AppBar(title: new Text('Just Scaffold')));
+  }
 
 }
