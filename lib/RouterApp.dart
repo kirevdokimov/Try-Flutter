@@ -5,11 +5,17 @@ import 'Notes/Animations.dart';
 
 class RouterApp extends StatelessWidget {
 
+  final ThemeData routerTheme = new ThemeData(
+    primarySwatch: Colors.green,
+    accentColor: Colors.greenAccent[400],
+  );
+
   @override
   Widget build(BuildContext context){
     return new MaterialApp(
       title: 'Router',
-      home: new _RouterContent()
+      home: new _RouterContent(),
+      theme: routerTheme,
     );
   }
 }
