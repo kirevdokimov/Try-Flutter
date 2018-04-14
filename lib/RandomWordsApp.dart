@@ -88,7 +88,7 @@ class RandomWordsState extends State<RandomWords> {
 
 
       },
-    ));
+    );
   }
 
   Widget _buildSuggestions() => new ListView.builder(
