@@ -12,6 +12,13 @@ class _HttpScreenState extends State<HttpScreen>{
 
   bool isFutureBuild = false;
 
+  @override
+  void initState(){
+    super.initState();
+    isFutureBuild = false;
+  }
+
+
   Future<Post> fetchPost() async {
     // Асинхронный запрос к серверу
     final response = await http.get('https://jsonplaceholder.typicode.com/posts/1');
