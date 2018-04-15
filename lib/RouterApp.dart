@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tryflutter/HelloWorldApp.dart';
 import 'Screens/ChatScreen.dart';
 import 'Screens/ChartScreen.dart';
+import 'Screens/HttpScreen.dart';
 import 'Notes/Animations.dart';
 
 
@@ -56,6 +57,7 @@ class _ListOfRoutes extends StatelessWidget{
       new ListTile(title: new Text("Just Scaffold"),onTap: () => to(context,new _JustScaffold())),
       new ListTile(title: new Text("Animations"),onTap: () => to(context,new AnimationScreen())),
       new ListTile(title: new Text("Charts"),onTap: () => to(context,new ChartScreen())),
+      new ListTile(title: new Text("Http"),onTap: () => to(context,new HttpScreen())),
     ]);
   }
 }
