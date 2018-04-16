@@ -22,12 +22,29 @@ class AudioPlayerScreen extends StatefulWidget{
 
 }
 
+class Clip {
+  double start;
+  double end;
+  Clip({this.start,this.end})
+}
+
 class AudioPlayerScreenState extends State<AudioPlayerScreen>{
+
+  Clip a = new Clip(
+          start: 0.736,
+          end: 2.3
+  );
 
   AudioPlayer audioPlayer;
 
   Future<ByteData> getFileData(String path) async {
     return await rootBundle.load(path);
+  }
+  
+  Future playClip(Clip clip) async{
+    await audioPlayer.seek(clip.start);
+    await audioPlayer.play(kUrl);
+    await audioPlayerPlayFile('assets/scream.mp3');
   }
 
   Future play() async {
@@ -38,18 +55,28 @@ class AudioPlayerScreenState extends State<AudioPlayerScreen>{
         //playerState = PlayerState.playing;
       });
   }
-
-  Future<ByteData> loadAsset() async {
-    return await rootBundle.load('assets/scream.mp3');
+  Future stop() async {
+    final result = await audioPlayer.stop();
+    if(result == 1){
+      //Success
+    }
   }
 
-  Future playLocalFile() async {
+  Future<ByteData> loadAsset(String assetPath) async {
+    return await rootBundle.load(assetPath);
+  }
+
+  Future audioPlayerPlayFile(String assetPath) async{
     // https://stackoverflow.com/questions/46486475/how-to-play-local-mp3-file-with-audioplayer-plugin-in-flutter/46498239#46498239
     // The audioplayer plugin currently only supports network paths and files.
     final file = new File('${(await getTemporaryDirectory()).path}/scream.mp3');
-    await file.writeAsBytes((await loadAsset()).buffer.asUint8List());
+    await file.writeAsBytes((await loadAsset(assetPath)).buffer.asUint8List());
+    return await audioPlayer.play(file.path, isLocal: true);
+  }
 
-    final result = await audioPlayer.play(file.path, isLocal: true);
+  Future playLocalFile() async {
+
+    final result = await audioPlayerPlayFile('assets/scream.mp3');
     if (result == 1)
       setState(() {
         print('_AudioAppState.play... PlayerState.playing');
@@ -78,6 +105,17 @@ class AudioPlayerScreenState extends State<AudioPlayerScreen>{
 
   void initAudioPlayer() {
     audioPlayer = new AudioPlayer();
+
+    audioPlayer.setDurationHandler((Duration d) => setState(() {
+      print('Duration $d');
+      //duration = d;
+    }));
+
+    audioPlayer.setPositionHandler((Duration  p) => setState(() {
+      print('Position $p');
+      if(p.inMilliseconds > a.end*1000){audioPlayer.stop();print("stop");}
+      //position = p;
+    }));
   }
 
   @override
