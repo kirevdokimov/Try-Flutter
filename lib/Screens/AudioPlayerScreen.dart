@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:flutter/services.dart' show rootBundle;
+
 typedef void OnError(Exception exception);
 
 enum PlayerState { stopped, playing, paused }
@@ -16,7 +18,74 @@ const kUrl2 = "http://www.rxlabz.com/labz/audio.mp3";
 
 class AudioPlayerScreen extends StatefulWidget{
 
-  _State createState() => new _State();
+  State<AudioPlayerScreen> createState() => new AudioPlayerScreenState();
+
+}
+
+class AudioPlayerScreenState extends State<AudioPlayerScreen>{
+
+  AudioPlayer audioPlayer;
+
+  Future<ByteData> getFileData(String path) async {
+    return await rootBundle.load(path);
+  }
+
+  Future play() async {
+    final result = await audioPlayer.play(kUrl);
+    if (result == 1)
+      setState(() {
+        print('_AudioAppState.play... PlayerState.playing');
+        //playerState = PlayerState.playing;
+      });
+  }
+
+  Future<ByteData> loadAsset() async {
+    return await rootBundle.load('assets/scream.mp3');
+  }
+
+  Future playLocalFile() async {
+    // https://stackoverflow.com/questions/46486475/how-to-play-local-mp3-file-with-audioplayer-plugin-in-flutter/46498239#46498239
+    // The audioplayer plugin currently only supports network paths and files.
+    final file = new File('${(await getTemporaryDirectory()).path}/scream.mp3');
+    await file.writeAsBytes((await loadAsset()).buffer.asUint8List());
+
+    final result = await audioPlayer.play(file.path, isLocal: true);
+    if (result == 1)
+      setState(() {
+        print('_AudioAppState.play... PlayerState.playing');
+        //playerState = PlayerState.playing;
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+            appBar: new AppBar(title: new Text('Audio')),
+            body: new RaisedButton(
+              onPressed: () => playLocalFile(),
+              child: new Text('Play'),
+            )
+    );
+  }
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    initAudioPlayer();
+  }
+
+  void initAudioPlayer() {
+    audioPlayer = new AudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    audioPlayer.stop();
+  }
+
 }
 
 class _State extends State<AudioPlayerScreen>{
@@ -71,6 +140,15 @@ class _State extends State<AudioPlayerScreen>{
         position = new Duration(seconds: 0);
       });
     });
+  }
+
+  Future playScream() async {
+    final result = await audioPlayer.play('assets/scream.mp3', isLocal: true);
+    if (result == 1)
+      setState(() {
+        print('_AudioAppState.play... PlayerState.playing');
+        playerState = PlayerState.playing;
+      });
   }
 
   Future play() async {
@@ -132,7 +210,7 @@ class _State extends State<AudioPlayerScreen>{
   Future _loadFile() async {
     final bytes = await _loadFileBytes(kUrl,
             onError: (Exception exception) =>
-                    print('_loadFile => exception ${exception}'));
+                    print('_loadFile => exception $exception'));
 
     final dir = await getApplicationDocumentsDirectory();
     final file = new File('${dir.path}/audio.mp3');
@@ -183,7 +261,7 @@ class _State extends State<AudioPlayerScreen>{
           child: new Column(mainAxisSize: MainAxisSize.min, children: [
             new Row(mainAxisSize: MainAxisSize.min, children: [
               new IconButton(
-                      onPressed: isPlaying ? null : () => play(),
+                      onPressed: isPlaying ? null : () => playScream(),
                       iconSize: 64.0,
                       icon: new Icon(Icons.play_arrow),
                       color: Colors.cyan),
