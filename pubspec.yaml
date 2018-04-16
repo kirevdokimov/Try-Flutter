@@ -12,6 +12,8 @@ dependencies:
   charts_flutter:
   http: "^0.11.3+16"
   shared_preferences:
+  audioplayer:
+  path_provider:
 
 dev_dependencies:
   flutter_test:

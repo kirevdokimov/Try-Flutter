@@ -4,6 +4,7 @@ import 'Screens/ChatScreen.dart';
 import 'Screens/ChartScreen.dart';
 import 'Screens/HttpScreen.dart';
 import 'Screens/SharedPreferencesScreen.dart';
+import 'Screens/AudioPlayerScreen.dart';
 import 'Notes/Animations.dart';
 
 
@@ -60,6 +61,7 @@ class _ListOfRoutes extends StatelessWidget{
       new ListTile(title: new Text("Charts"),onTap: () => to(context,new ChartScreen())),
       new ListTile(title: new Text("Http"),onTap: () => to(context,new HttpScreen())),
       new ListTile(title: new Text("SharedPreferences"),onTap: () => to(context,new SharedPreferencesScreen())),
+      new ListTile(title: new Text("AudioPlayer"),onTap: () => to(context,new AudioPlayerScreen())),
     ]);
   }
 }
